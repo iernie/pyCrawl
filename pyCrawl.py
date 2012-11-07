@@ -16,7 +16,6 @@ class pyCrawl():
     def __init__(self, seed):
         self.link_regex = re.compile('<a.*href=[\'|"](.*?)[\'|"].*>')
         self.queue = set([seed])
-        self.found = set([])
         self.crawled = set([])
 
     def save_state(self):
@@ -60,15 +59,9 @@ class pyCrawl():
                 elif link.startswith('/'):
                     link = url_parsed[0] + "://" + url_parsed[1] + link
 
-                if link.startswith('http'):
+                if link.startswith('http') and link not in self.crawled and link not in self.queue:
+                    self.queue.add(link)
 
-                    if link in self.found:
-                        continue
-
-                    if link not in self.crawled:
-                        self.queue.add(link)
-
-                    self.found.add(link)
         print "Job done"
 
 
